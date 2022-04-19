@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block link %}<link rel="stylesheet" href="{% static 'css/login_style.css' %}">{% endblock link %}
+{% block title %}<title>EpicEvent - Connexion</title>{% endblock title %}
+{% block content %}
+    <div class="container content">
+        <div class="row align-items-center">
+            <section id="login" class="col-md-6">
+                <div class="d-grid gap-2">
+                    <h2 class="mx-auto">Connectez-vous</h2>
+                    <p class="mx-auto">{{ message }}</p>
+                    <form class="mx-auto" method="post" enctype="multipart/form-data">
+                        {{ form.as_p }}
+                        {% csrf_token %}
+                        <button class="col-12 btn btn-secondary btn-lg" type="submit">Se connecter</button>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock content %}
