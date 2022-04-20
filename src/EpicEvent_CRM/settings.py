@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'rest_framework',
     'rest_framework_simplejwt',
     'core',
@@ -80,8 +81,12 @@ WSGI_APPLICATION = 'EpicEvent_CRM.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'epicevent',
+        'USER': 'admin',
+        'PASSWORD': 'EpicEvent2022',
+        'HOST': 'localhost',
+        'PORT': '5433',
     }
 }
 
@@ -134,7 +139,7 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = ''
 LOGOUT_REDIRECT_URL = LOGIN_URL
 
-# AUTH_USER_MODEL = "core.Employee"
+AUTH_USER_MODEL = "core.Employee"
 
 JWT_AUTH = {
 
