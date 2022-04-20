@@ -3,3 +3,5 @@ env/
 __init__.py
 __pycache__
 .flake8
+migrations/
+requeteSQL.sql
