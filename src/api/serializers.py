@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
-from core.models import Address, Company, Group, Employee, Client, Event, Contract
+from core.models import Address, Company, Employee, Client, Event, Contract, Group
 
 
 class AdressListSerializer(ModelSerializer):

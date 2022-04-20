@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.permissions import IsAuthenticated
 
-from core.models import Address, Company, Group, Employee, Client, Event, Contract
+from core.models import Address, Company, Employee, Client, Event, Contract, Group
 from .serializers import *
 
 # Create your views here.
