@@ -23,25 +23,25 @@ from api.views import EventViewSet, ContractViewSet, ClientViewSet, EmployeeView
 
 
 router = SimpleRouter()
-router.register(r'events', EventViewSet, basename='events')
+router.register(r'events', EventViewSet, basename='events')  # .../api/events/
 
-router.register(r'contracts', ContractViewSet, basename='contracts')
+router.register(r'contracts', ContractViewSet, basename='contracts')  # .../api/contracts/
 
-router.register(r'employees', EmployeeViewSet, basename='employees')
+router.register(r'employees', EmployeeViewSet, basename='employees')  # .../api/employees/
 
-router.register(r'clients', ClientViewSet, basename='clients')
+router.register(r'clients', ClientViewSet, basename='clients')  # .../api/clients/
 
-router.register(r'companies', CompanyViewSet, basename='companies')
-company_router = NestedSimpleRouter(router, r'companies', lookup='company')
-company_router.register(r'clients', ClientViewSet, basename='company-clients')
+router.register(r'companies', CompanyViewSet, basename='companies')  # .../api/companies/
+companies_router = NestedSimpleRouter(router, r'companies', lookup='company')
+companies_router.register(r'clients', ClientViewSet, basename='company-clients')  # .../api/companies/<id>/clients/
 
-router.register(r'groups', GroupViewSet, basename='groups')
+router.register(r'groups', GroupViewSet, basename='groups')  # .../api/groups/
 groups_router = NestedSimpleRouter(router, r'groups', lookup='group')
-groups_router.register(r'employees', EmployeeViewSet, basename='group-employees')
+groups_router.register(r'employees', EmployeeViewSet, basename='group-employees')  # .../api/groups/<id>/employees/
 group_employees_router = NestedSimpleRouter(groups_router, r'employees', lookup='employee')
-group_employees_router.register(r'contracts', ContractViewSet, basename='saler-contracts')
-group_employees_router.register(r'clients', ClientViewSet, basename='saler-clients')
-group_employees_router.register(r'events', EventViewSet, basename='support-events')
+group_employees_router.register(r'contracts', ContractViewSet, basename='saler-contracts')  # .../api/groups/<id>/employees/<id>/contracts/
+group_employees_router.register(r'clients', ClientViewSet, basename='saler-clients')  # .../api/groups/<id>/employees/<id>/clients/
+group_employees_router.register(r'events', EventViewSet, basename='support-events')  # .../api/groups/<id>/employees/<id>/events/
 
 
 urlpatterns = [
@@ -50,5 +50,8 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/', include(router.urls)),
+    path('api/', include(companies_router.urls)),
+    path('api/', include(groups_router.urls)),
+    path('api/', include(group_employees_router.urls)),
     path('core/', include('core.urls'))
 ]
