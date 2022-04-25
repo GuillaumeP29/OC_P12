@@ -23,13 +23,13 @@ from api.views import EventViewSet, ContractViewSet, ClientViewSet, EmployeeView
 
 
 router = SimpleRouter()
-router.register(r'events', EventViewSet, basename='events')  # .../api/events/
-
-router.register(r'contracts', ContractViewSet, basename='contracts')  # .../api/contracts/
-
 router.register(r'employees', EmployeeViewSet, basename='employees')  # .../api/employees/
 
 router.register(r'clients', ClientViewSet, basename='clients')  # .../api/clients/
+
+router.register(r'events', EventViewSet, basename='events')  # .../api/events/
+
+router.register(r'contracts', ContractViewSet, basename='contracts')  # .../api/contracts/
 
 router.register(r'companies', CompanyViewSet, basename='companies')  # .../api/companies/
 companies_router = NestedSimpleRouter(router, r'companies', lookup='company')
