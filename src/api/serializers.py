@@ -1,19 +1,20 @@
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
+from django.contrib.auth.models import Group
 
-from core.models import Address, Company, Employee, Client, Event, Contract, Group
+from core.models import Address, Company, Employee, Client, Event, Contract
 
 
-class AdressListSerializer(ModelSerializer):
+class AddressListSerializer(ModelSerializer):
     class Meta:
         model = Address
-        fileds = ['number', 'street', 'city', 'country']
+        fields = ['number', 'street', 'city', 'country']
 
 
 class AddressDetailSerializer(ModelSerializer):
     class Meta:
         model = Address
-        fileds = ['id', 'number', 'street','city', 'zip_code', 'country']
+        fields = ['id', 'number', 'street', 'city', 'zip_code', 'country']
 
 
 class CompanyNameSerializer(ModelSerializer):
@@ -34,7 +35,7 @@ class CompanyListSerializer(ModelSerializer):
 
 
 class CompanyDetailSerializer(ModelSerializer):
-    address = AddressDetailSerializer()
+    address = AddressListSerializer()
 
     class Meta:
         model = Company
@@ -48,22 +49,26 @@ class GroupNameSerializer(ModelSerializer):
 
 
 class EmployeeListSerializer(ModelSerializer):
-    group = GroupNameSerializer()
+    groups = GroupNameSerializer(many=True)
 
     class Meta:
         model = Employee
-        fields = ['id', 'first_name', 'last_name', 'group']
+        fields = ['id', 'first_name', 'last_name', 'groups']
 
 
 class EmployeeDetailSerializer(ModelSerializer):
-    group = GroupNameSerializer()
-
     class Meta:
         model = Employee
         fields = [
-            'id', 'first_name', 'last_name', 'email', 'phone', 'mobile',
-            'is_staff', 'date_hired', 'date_updated', 'group'
+            'id', 'username', 'password', 'first_name', 'last_name', 'email', 'phone', 'mobile',
+            'is_staff', 'date_updated', 'groups'
             ]
+
+    def create(self, validated_data):
+        employee = super(EmployeeDetailSerializer, self).create(validated_data)
+        employee.set_password(validated_data['password'])
+        employee.save()
+        return employee
 
 
 class ClientListSerializer(ModelSerializer):
@@ -110,7 +115,7 @@ class ContractListSerializer(ModelSerializer):
         fields = ['id', 'client']
 
 
-class ContracDetailSerializer(ModelSerializer):
+class ContractDetailSerializer(ModelSerializer):
     class Meta:
         model = Contract
         fields = ['id', 'signature_date', 'amount', 'payment_due_date', 'client']
