@@ -1,5 +1,6 @@
 from rest_framework.permissions import BasePermission
-from core.models import Client, Contract, Event, Employee
+from django.contrib.auth.models import Group
+from core.models import Client, Contract, Event, Employee, ClientAssociation
 
 
 def is_superuser(user):
@@ -10,18 +11,24 @@ def get_obj_name(object):
     if (isinstance(object, Client)):
         return 'client'
     elif (isinstance(object, Contract)):
+        print("On a bien un contrat !!!")
         return 'contract'
     elif (isinstance(object, Event)):
         return 'event'
     elif (isinstance(object, Employee)):
         return 'employee'
+    elif (isinstance(object, Group)):
+        return 'group'
+    elif (isinstance(object, ClientAssociation)):
+        return 'clientassociation'
 
 
 def user_has_permission(user, obj, method_name):
     app_name = 'core'
+    if (isinstance(obj, Group)):
+        app_name = 'auth'
     object_name = get_obj_name(obj)
     permission_name = f'{app_name}.{method_name}_{object_name}'
-    groups = user.groups.all()
     return user.has_perm(permission_name)
 
 
@@ -54,6 +61,8 @@ class CanGet(BasePermission):
             return True
         elif user_has_permission(user, obj, method_name):
             return True
+        else:
+            return False
 
 
 class CanCreate(BasePermission):

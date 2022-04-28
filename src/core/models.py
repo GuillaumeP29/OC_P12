@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, UserManager, PermissionsMixin
 from django.utils import timezone
+import datetime
 
 # Create your models here.
 class TimeStamp(models.Model):
@@ -73,15 +74,28 @@ class Client(Person):
         return f'{self.last_name.upper()} {self.first_name}'
 
 
+class Contract(TimeStamp):
+    signature_date = models.DateTimeField(blank=True, null=True)
+    amount = models.FloatField(null=True)
+    payment_due_date = models.DateTimeField(default=datetime.datetime.now()+datetime.timedelta(weeks=26))
+    client = models.ForeignKey(Client, on_delete=models.DO_NOTHING, blank=True, null=True)
+
+    class Meta:
+        abstract = False
+
+    def __str__(self):
+        return f'{self.id}'
+
+
 class Event(TimeStamp):
 
     class EventStatus(models.Model):
         name = models.CharField(primary_key=True , max_length=50)
 
     name = models.CharField(max_length=500)
-    client = models.ForeignKey(Client, on_delete=models.DO_NOTHING, default=0)
+    contract = models.OneToOneField(Contract, on_delete=models.CASCADE)
     support_contact = models.ManyToManyField(Employee, blank=True, through="EventAssociation")
-    event_status = models.ForeignKey(EventStatus, on_delete=models.SET_NULL, blank=True, null=True)
+    event_status = models.ForeignKey(EventStatus, on_delete=models.SET_NULL, blank=True, null=True, default="On going")
     attendees = models.IntegerField(blank=True, null=True)
     event_date = models.DateTimeField(blank=True, null=True)
     notes = models.TextField(blank=True)
@@ -91,19 +105,6 @@ class Event(TimeStamp):
 
     def __str__(self):
         return self.name
-
-
-class Contract(TimeStamp):
-    signature_date = models.DateTimeField(blank=True, null=True)
-    amount = models.FloatField(null=True)
-    payment_due_date = models.DateTimeField()
-    client = models.ForeignKey(Client, on_delete=models.DO_NOTHING, default=0)
-
-    class Meta:
-        abstract = False
-
-    def __str__(self):
-        return self.id
 
 
 class Association(TimeStamp):
