@@ -5,3 +5,4 @@ __pycache__
 .flake8
 migrations/
 requeteSQL.sql
+*.log
