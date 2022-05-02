@@ -27,6 +27,7 @@ Afin d'installer automatiquement tous les dépendences nécessaires au projet, d
 " *pip install -r requirements.txt* "
 #### Unix :
 " *python3 -m pip install -r requirments.txt* "
+
 ---
 
 
